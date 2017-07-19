@@ -1,0 +1,24 @@
+2016.12.17 01:49:33	*** repo:push #9b1f0a53-01ab-4dbe-a269-b88bf7b08b32 (Bitbucket-Webhooks/2.0)
+2016.12.17 01:49:33	remote addr: 104.192.143.194
+2016.12.17 01:49:33	Valid payload was received
+2016.12.17 01:49:33	Nothing to update
+2016.12.17 01:49:33	CONFIG: Array
+(
+    [bitbucketUsername] => refresh_conf
+    [gitCommand] => git
+    [repositoriesPath] => /home/paulwalt/repos
+    [log] => 1
+    [logFile] => bitbucket.log
+    [logClear] => 1
+    [verbose] => 1
+    [folderMode] => 448
+    [mailFrom] => Automatic Bitbucket Deploy <git@bitbucket.com>
+)
+
+2016.12.17 01:49:33	REPO: refresh_theme
+2016.12.17 01:49:33	repoPath: /home/paulwalt/repos/refresh_theme.git/
+2016.12.17 01:49:33	BRANCHES: Array
+(
+)
+
+2016.12.17 01:49:33	Fetching repository 'refresh_theme'

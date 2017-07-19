@@ -13,14 +13,27 @@
 
 // Auxiliary variables, used only for constructing $CONFIG and $PROJECTS
 
-$REPOSITORIES_PATH = '/home/paulwalt/repos';
-$PROJECTS_PATH     = '/home/paulwalt/public_html';
+// TODO: explain how/why to write paths
+/**
+ * 
+ */
+$REPOSITORIES_PATH = '/home/<domain>/repos';
+
+/**
+ * 
+ */
+$PROJECTS_PATH     = '/home/<domain>/public_html';
+
+/**
+ * 
+ */
+$USER_NAME = '<user_name_slug>';
 
 // Base tool configuration:
 $CONFIG = array(
-  'bitbucketUsername' => 'refresh_conf',    // The username or team name where the repository is located on bitbucket.org, *REQUIRED*
+  'bitbucketUsername' => $USER_NAME,
   'gitCommand'        => 'git',              // Git command, *REQUIRED*
-  'repositoriesPath'  => $REPOSITORIES_PATH, // Folder containing all repositories, *REQUIRED*
+  'repositoriesPath'  => $REPOSITORIES_PATH,
   'log'               => true,               // Enable logging, optional
   'logFile'           => 'bitbucket.log',    // Logging file name, optional
   'logClear'          => false,               // clear log each time, optional
@@ -29,11 +42,15 @@ $CONFIG = array(
   'mailFrom'          => 'Automatic Bitbucket Deploy <git@bitbucket.com>', // The sender e-mail address for info emails
 );
 
+//==============================================================================
+// Projects
+//==============================================================================
+
 // List of deploying projects:
 $PROJECTS = array(
-  'refresh_theme' => array( // The key MUST match a bitbucket.org repository name
-    'branch' => array(
-      'deployPath'  => $PROJECTS_PATH.'/refresh/wordpress/wp-content/themes/refresh_theme', // Path to deploy project, *REQUIRED*
+  '<repository>' => array( // The key must match a bitbucket.org repository name slug
+    '<branch>' => array(      // The key must match the branch name you wish to deploy (ie: 'production', 'dist')
+      'deployPath'  => $PROJECTS_PATH.'/path/to/deploy/project', // Path to deploy project, *REQUIRED*
       'postHookCmd' => '',               // command to execute after deploy, optional
       'mailTo'      => 'pwalton@live.ca' // log email recipient, optional
     ),

@@ -10,7 +10,6 @@
  * http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
  */
 
-
 // Initalize:
 require_once('log.php');
 require_once('bitbucket.php');

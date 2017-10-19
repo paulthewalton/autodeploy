@@ -13,7 +13,8 @@
 
 // Global variables
 
-define('DEFAULT_FOLDER_MODE', 0755);
+define('DEFAULT_PROJECT_FOLDER_MODE', 0711);
+define('REPO_FOLDER_MODE', 0700);
 
 $PAYLOAD  = array ();
 $REPO     = '';
@@ -101,7 +102,7 @@ function fetchParams ()
 			isset($PROJECTS[$REPO][$change->new->name]) ) {
 			// Create branch name for checkout
 			array_push($BRANCHES, $change->new->name);
-			_LOG("Changes in branch '".$change->new->name."' was fetched");
+			_LOG("Changes in branch '".$change->new->name."' were fetched");
 		}
 	}
 
@@ -125,7 +126,7 @@ function checkPaths ()/* Check repository and project paths; create them if necc
 
 	// Check for repositories folder path; create if absent
 	if ( !is_dir($CONFIG['repositoriesPath']) ) {
-		$mode = ( !empty($CONFIG['folderMode']) ) ? $CONFIG['folderMode'] : DEFAULT_FOLDER_MODE;
+		$mode = REPO_FOLDER_MODE;
 		if ( mkdir($CONFIG['repositoriesPath'],$mode,true) ) {
 			_LOG("Creating repository folder '".$CONFIG['repositoriesPath']." (".decoct($mode).") for '$REPO'");
 		}
@@ -138,7 +139,7 @@ function checkPaths ()/* Check repository and project paths; create them if necc
 	// Create folder if absent for each pushed branch
 	foreach ( $BRANCHES as $branchName ) {
 		if ( !is_dir($PROJECTS[$REPO][$branchName]['deployPath']) ) {
-			$mode = ( !empty($CONFIG['folderMode']) ) ? $CONFIG['folderMode'] : DEFAULT_FOLDER_MODE;
+			$mode = ( !empty($CONFIG['folderMode']) ) ? $CONFIG['folderMode'] : DEFAULT_PROJECT_FOLDER_MODE;
 			if ( mkdir($PROJECTS[$REPO][$branchName]['deployPath'],$mode,true) ) {
 				_LOG("Creating project folder '".$PROJECTS[$REPO][$branchName]['deployPath'].
 					" (".decoct($mode).") for '$REPO' branch '$branchName'");

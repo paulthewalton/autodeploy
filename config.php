@@ -64,7 +64,7 @@ $USER_NAME = '<user_name_slug>';
  *                                    ^^^^^^^^^^
  */
 $PROJECTS = array(
-  '<repository>' => array( // The key must match a bitbucket.org repository name slug
+  '<repository>' => array( // The key must match a bitbucket.org repository name slug, see above
     '<branch>' => array(      // The key must match the branch name you wish to deploy (ie: 'production', 'dist')
       'deployPath'  => $PROJECTS_PATH.'/path/to/deploy/project', // Path to deploy project, *REQUIRED*
       'postHookCmd' => '',               // command to execute after deploy, optional
@@ -86,6 +86,6 @@ $CONFIG = array(
   'logFile'           => 'bitbucket.log',    // Logging file name, optional
   'logClear'          => false,               // clear log each time, optional
   'verbose'           => true,               // show debug info in log, optional
-  'folderMode'        => 0700,               // creating folder mode, optional
+  'folderMode'        => 0711,               // creating folder mode, optional, see http://permissions-calculator.org/
   'mailFrom'          => 'Automatic Bitbucket Deploy <git@bitbucket.com>', // The sender e-mail address for info emails
 );

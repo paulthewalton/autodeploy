@@ -40,7 +40,6 @@ function initLog ()
 	if ( !empty($CONFIG['logClear']) ) {
 		_LOG_CLEAR();
 	}
-
 }
 
 /**
@@ -73,7 +72,6 @@ function initPayload ()
 	}
 
 	_LOG("Valid payload was received");
-
 }
 
 /**
@@ -110,7 +108,6 @@ function fetchParams ()
 	if ( empty($BRANCHES) ) {
 		_LOG("Nothing to update");
 	}
-
 }
 
 /**
@@ -153,6 +150,7 @@ function checkPaths ()/* Check repository and project paths; create them if necc
 			}
 		}
 	}
+}
 
 /**
  * Logs verbose information.
@@ -164,7 +162,6 @@ function checkPaths ()/* Check repository and project paths; create them if necc
  * @global array  $BRANCHES
  * @return void
  */
-}
 function placeVerboseInfo ()/* Place verbose log information -- if specified in config */
 {
 	global $REPO, $CONFIG, $BRANCHES;
@@ -212,7 +209,6 @@ function fetchRepository ()/* Fetch or clone repository */
 			exit;
 		}
 	}
-
 }
 
 /**

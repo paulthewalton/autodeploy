@@ -1,5 +1,9 @@
 <?php
 
+// b2$r1woJmt@*9zn1&Z4g
+
+
+
 /**
  * Routines for work with bitbucket server, repositories and projects.
  *
@@ -13,8 +17,7 @@
 
 // Global variables
 
-define('DEFAULT_PROJECT_FOLDER_MODE', 0711);
-define('REPO_FOLDER_MODE', 0700);
+define('DEFAULT_FOLDER_MODE', 0711);
 
 $PAYLOAD  	= array ();
 $BRANCHES 	= array ();
@@ -56,6 +59,11 @@ function initPayload ()
 	_LOG('*** '.$_SERVER['HTTP_X_EVENT_KEY'].' #'.$_SERVER['HTTP_X_HOOK_UUID'].' ('.$_SERVER['HTTP_USER_AGENT'].')');
 	_LOG('remote addr: '.$_SERVER['REMOTE_ADDR']);
 
+	if ($_SERVER['HTTP_USER_AGENT'] != 'Bitbucket-Webhooks/2.0') {
+		_ERROR('Access attempted by unauthorized user-agent!');
+		exit;
+	}
+
 	if ( isset($_POST['payload']) ) { // old method
 		$PAYLOAD = $_POST['payload'];
 	} else { // new method
@@ -68,7 +76,8 @@ function initPayload ()
 	}
 
 	if ( !isset($PAYLOAD->repository->name, $PAYLOAD->push->changes) ) {
-		_ERROR("Invalid payload data was received!");
+        _ERROR("Invalid payload data was received!");
+        _LOG($PAYLOAD);
 		exit;
 	}
 
@@ -127,7 +136,7 @@ function checkPaths ()/* Check repository and project paths; create them if necc
 	// Check for repositories folder path; create if absent
 	$baseRepoPath = escapeshellcmd($CONFIG['repositoriesPath']);
 	if ( !is_dir($baseRepoPath) ) {
-		if ( mkdir($baseRepoPath,REPO_FOLDER_MODE,true) ) {
+		if ( mkdir($baseRepoPath,DEFAULT_FOLDER_MODE,true) ) {
 			_LOG("Creating repository folder '$baseRepoPath' (".decoct(REPO_FOLDER_MODE).") for '$REPO'");
 		}
 		else {
@@ -229,26 +238,14 @@ function checkoutProject ()
 
 	// Compose current repository path
 	$repoPath = escapeshellcmd($CONFIG['repositoriesPath'].'/'.$PROJECTS[$REPO]['slug'].'.git/');
-	$deployPath = escapeshellcmd($PROJECTS[$REPO][$branchName]['deployPath']);
 
 	// Checkout project files
 	foreach ( $BRANCHES as $branchName ) {
+		$deployPath = escapeshellcmd($PROJECTS[$REPO][$branchName]['deployPath']);
 		system('cd '.$repoPath.' && GIT_WORK_TREE='.$deployPath.' '.escapeshellcmd($CONFIG['gitCommand'].' checkout -f '.$branchName), $status);
 		if ( $status !== 0 ) {
 			_ERROR("Cannot checkout branch '$branchName' in repo '".$PROJECTS[$REPO]['slug']."'!");
 			exit;
-		}
-
-		if ( !empty($PROJECTS[$REPO][$branchName]['postHookCmd']) ) {
-			_ERROR("Error: post hook command feature disabled");
-			/*
-			system('cd '.$deployPath.' && '.$PROJECTS[$REPO][$branchName]['postHookCmd'],
-				$status);
-			if ( $status !== 0 ) {
-				_ERROR("Error in post hook command for branch '$branchName' in repo '".$PROJECTS[$REPO]['slug']."'!");
-				exit;
-			*/
-			}
 		}
 
 		// Log the deployment
@@ -265,11 +262,4 @@ function checkoutProject ()
 			_LOG("Sent e-mail to ".$mailto);
 		}
 	}
-}
-
-function hardenSelf () {
-	//change permissions on all files to 0600
-	//change folder permission to 0700
-	//rename folder to obfuscate
-	//
 }

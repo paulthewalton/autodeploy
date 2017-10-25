@@ -30,6 +30,10 @@ $REPOSITORIES_PATH = '/home/<username>/repos';
  *
  * This will be the base for all individual project targets, and may just be the
  * public website directory.
+ *
+ * eg:  /home/user1/public_html
+ *      /home/user1/html
+ *      /home/user1/www
  */
 $PROJECTS_PATH     = '/home/<username>/public_html';
 
@@ -44,7 +48,7 @@ $PROJECTS_PATH     = '/home/<username>/public_html';
  *
  * If deploying repositories owned by multiple different users and/or teams,
  * leave this as an empty string and include the user/team names when writing
- * the individual project names in the $PROJECTS array.
+ * the individual repository slugs in the $PROJECTS array.
  */
 $USER_NAME = '<user_name_slug>';
 
@@ -53,21 +57,29 @@ $USER_NAME = '<user_name_slug>';
  *
  * If deploying repositories owned by multiple different users and/or teams,
  * leave $USER_NAME as an empty string and include the user/team names when
- * writing the individual project names here.
+ * writing the individual repository slugs here.
  *
- * eg: 'team_name_1/repository_a' => array(...),
- *     'team_name_2/repository_b' => array(...)
+ * eg: 'Repository A' => array(
+ *        'myBranch'  => array(...),
+ *        'slug'      => 'team_name_1/repository_a',
+ *      ),
+ *      'Repository B'  => array(
+ *        'myBranch'  => array(...),
+ *        'slug'      =>'team_name_2/repository_b'
+ *      ),
+ *      ...
  *
  * Repository slugs can be found in Bitbucket project URLS:
  *
  * eg: https://bitbucket.org/username/repository.git
  *                                    ^^^^^^^^^^
+ *
  */
 $PROJECTS = array(
-  '<repository>' => array( // The key must match a bitbucket.org repository name slug, see above
+  '<repository_name>' => array( // The key must match a bitbucket.org repository name (ie: 'My Repository')
+    'slug' => '<repository_slug>', // The key must match a bitbucket.org repository name, see above *REQUIRED*
     '<branch>' => array(      // The key must match the branch name you wish to deploy (ie: 'production', 'dist')
-      'deployPath'  => $PROJECTS_PATH.'/path/to/deploy/project', // Path to deploy project, *REQUIRED*
-      'postHookCmd' => '',               // command to execute after deploy, optional
+      'deployPath'  => $PROJECTS_PATH.'/path/to/deploy/project', // Path to deploy the individual project, *REQUIRED*
       'mailTo'      => 'email@example.com' // log email recipient, optional
     ),
   ),
@@ -80,8 +92,8 @@ $PROJECTS = array(
 
 $CONFIG = array(
   'bitbucketUsername' => $USER_NAME,
-  'gitCommand'        => 'git',              // Git command, *REQUIRED*
   'repositoriesPath'  => $REPOSITORIES_PATH,
+  'gitCommand'        => 'git',              // Git command, *REQUIRED*
   'log'               => true,               // Enable logging, optional
   'logFile'           => 'bitbucket.log',    // Logging file name, optional
   'logClear'          => false,               // clear log each time, optional

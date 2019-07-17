@@ -1,20 +1,13 @@
 <?php
-
 /**
  * Logging module.
- *
- * Based on 'Automatic Bitbucket Deploy' by Igor Lilliputten (v.151005.001 (0.0.2)):
- * https://bitbucket.org/lilliputten/automatic-bitbucket-deploy/
- *
- * Based on 'Automated git deployment' script by Jonathan Nicoal:
- * http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
  */
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
 
-
-// Global variables
-
-$_LOG_FILE    = 'log.txt'; // default log file name
-$_LOG_ENABLED = true;      // set to 'true' for enabling logging
+$_LOG_FILE = 'deployment.log'; // default log file name
+$_LOG_ENABLED = true; // set to 'true' for enabling logging
 
 /**
  *
@@ -22,17 +15,15 @@ $_LOG_ENABLED = true;      // set to 'true' for enabling logging
  *
  * @return void
  */
-function _LOG_CLEAR ()
+function _LOG_CLEAR()
 {
-	global $_LOG_FILE;
+    global $_LOG_FILE;
 
-	if ( !empty($GLOBALS['_LOG_ENABLED']) ) {
-		// file_put_contents($GLOBALS['_LOG_FILE'], "", LOCK_EX);
-		// flush();
-		if ( is_file($_LOG_FILE) ) {
-			unlink($_LOG_FILE);
-		}
-	}
+    if (!empty($GLOBALS['_LOG_ENABLED'])) {
+        if (is_file($_LOG_FILE)) {
+            unlink($_LOG_FILE);
+        }
+    }
 }
 
 /**
@@ -41,13 +32,13 @@ function _LOG_CLEAR ()
  * @param string $s
  * @return void
  */
-function _LOG ($s)
+function _LOG($s)
 {
-	if ( !empty($GLOBALS['_LOG_ENABLED']) ) {
-		$datetime = date('Y.m.d H:i:s');
-		file_put_contents($GLOBALS['_LOG_FILE'], $datetime."\t".$s."\n", FILE_APPEND | LOCK_EX);
-		flush();
-	}
+    if (!empty($GLOBALS['_LOG_ENABLED'])) {
+        $datetime = date('Y.m.d H:i:s');
+        file_put_contents($GLOBALS['_LOG_FILE'], $datetime . "\t" . $s . "\n", FILE_APPEND | LOCK_EX);
+        flush();
+    }
 }
 
 /**
@@ -57,12 +48,15 @@ function _LOG ($s)
  * @param mixed  $p
  * @return void
  */
-function _LOG_VAR ($s,$p)
+function _LOG_VAR($s, $p)
 {
-	_LOG($s.': '.print_r($p,true));
+    _LOG($s . ': ' . print_r($p, true));
 }
 
-function _ERROR ($s)
+/**
+ * Log errors with prefix
+ */
+function _ERROR($s)
 {
-	_LOG('ERROR: '.$s);
+    _LOG('ERROR: ' . $s);
 }

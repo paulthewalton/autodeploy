@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-define('DEFAULT_PROJECT_FOLDER_MODE', 0711);
+define('DEFAULT_PROJECT_FOLDER_MODE', 0755);
 define('DEFAULT_REPO_FOLDER_MODE', 0700);
 
 $PAYLOAD = array();
@@ -109,7 +109,7 @@ function parse_payload()
         }
     } else if (isset($PAYLOAD->ref)) {
         // GitHub
-        $branch_name = substr($PAYLOAD->ref, strlen('refs/head/'));
+        $branch_name = substr($PAYLOAD->ref, strlen('refs/head/') + 1);
         if (isset($PROJECTS[$REPO][$branch_name])) {
             // Collect branch name for checkout
             array_push($BRANCHES, $branch_name);
@@ -237,7 +237,7 @@ function fetch_repository()
  */
 function checkout_project()
 {
-    global $REPO, $CONFIG, $PROJECTS, $BRANCHES;
+    global $REPO, $CONFIG, $PROJECTS, $BRANCHES, $REPOS_PATH;
 
     // Compose current repository path
     $repo_path = escapeshellcmd($REPOS_PATH . "/$REPO.git/");
@@ -248,7 +248,9 @@ function checkout_project()
         $checkout_repo = escapeshellcmd($CONFIG['git_cmd'] . " checkout -f $branch_name");
         system("cd $repo_path && GIT_WORK_TREE=$deploy_path $checkout_repo", $status);
         if ($status !== 0) {
-            _ERROR("Cannot checkout branch '$branch_name' in repo '" . $REPO . "'!");
+            _ERROR("Cannot checkout branch '$branch_name' in repo '$REPO' into '$deploy_path'");
+            _LOG_VAR("CMD: ", "cd $repo_path && GIT_WORK_TREE=$deploy_path $checkout_repo");
+            _ERROR("CHECKOUT STATUS: $status");
             exit;
         }
 

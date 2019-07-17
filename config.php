@@ -44,7 +44,7 @@ $CONFIG = array(
     'log_file' => '', // Logging file name
     'log_clear' => false, // clear log each time
     'verbose' => false, // show debug info in log
-    'project_folder_mode' => 0711, // creating folder mode
+    'project_folder_mode' => 0755, // creating folder mode
     'repo_folder_mode' => 0700, // creating folder mode
     'mail_from' => '', // The sender e-mail address for info emails
 );

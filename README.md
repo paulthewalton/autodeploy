@@ -18,14 +18,11 @@ Based on '[Automated git deployment](http://jonathannicol.com/blog/2013/11/19/au
 * [Things to Avoid](#user-content-things-to-avoid)
 * [Troubleshooting](#user-content-troubleshooting)
 
-***
 
 ## Desired Workflow
 1. Write some great code
 2. Commit or merge into a specific branch of your repository and push
 3. Bitbucket or GitHub automatically deploys changes in that branch to your live/staging/whatever environment
-
-***
 
 ## Installation
 
@@ -51,6 +48,22 @@ For each watched repository:
   Make sure that your webhook is triggered on 'push'.
   To edit webhooks, go to the repository's _Settings > Webhooks_.
 * Add either a Deploy key (GitHub) or an Access key (Bitbucket) to your repo, and paste in the contents of the public key that you made.
+
+Back on your server, edit your `~/.ssh/config` file to add bitbucket.org or github.com as a host:
+
+```shell
+$ touch ~/.ssh/config # create if the file doesn't exist
+$ nano ~/.ssh/config # open to edit, you don't have to use nano if you have another editor available that you prefer
+```
+
+Then, in `~/.ssh/config`:
+
+```
+Host github.com
+    IdentityFile ~/.ssh/<your_private_key_file>
+```
+
+This ensures that the correct key is used when connecting by SSH to target host.
 
 Clone this repo into a folder called "deploy" (or whatever) in the public website directory of the domain to which you want to deploy.
 

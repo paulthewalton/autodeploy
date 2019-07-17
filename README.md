@@ -8,23 +8,15 @@ Based on '[Automated git deployment](http://jonathannicol.com/blog/2013/11/19/au
 
 ## Table of Contents
 
-[Desired Workflow](#markdown-header-desired-workflow)
-
-[Set up](#markdown-header-set-up)
-
-[Configuration](#markdown-header-configuration)
-
-* [Repositories Path](#markdown-header-repositories-path)
-
-* [Projects](#markdown-header-projects)
-
-* [Options](#markdown-header-options)
-
-[Things to Do](#markdown-header-mail-from-optional)
-
-[Things to Avoid](#markdown-header-things-to-avoid)
-
-[Troubleshooting](#markdown-header-troubleshooting)
+* [Desired Workflow](#markdown-header-desired-workflow)
+* [Set up](#markdown-header-set-up)
+* [Configuration](#markdown-header-configuration)
+  * [Repositories Path](#markdown-header-repositories-path)
+  * [Projects](#markdown-header-projects)
+  * [Options](#markdown-header-options)
+* [Things to Do](#markdown-header-mail-from-optional)
+* [Things to Avoid](#markdown-header-things-to-avoid)
+* [Troubleshooting](#markdown-header-troubleshooting)
 
 ***
 
@@ -35,34 +27,40 @@ Based on '[Automated git deployment](http://jonathannicol.com/blog/2013/11/19/au
 
 ***
 
-## Set up
+## Installation
 
-1. SSH into your server and create an ssh key, leaving the password empty:
-    ```shell
-    $ ssh username@mysite.com # log in
-    $ cd ~/.ssh
-    $ ssh-keygen -t rsa -b 4096 -C "autodeploy"
-    ```
-    Next, copy the contents of your public key, which can be retrieved by running:
-    ```shell
-    $ cat ~/.ssh/<filename>.pub # <filename> is what you put during the generation process, or defaults to id_rsa
-    ```
-    Paste the contents of you public key into a .txt or whatever for later.
+SSH into your server and create an ssh key, leaving the password empty:
 
-2. Create a folder called "deploy" (or whatever) in the public website directory of the domain to which you want to deploy. This folder will need to contain:
-    * `hook.php`
-    * `deploy.php`
-    * `log.php`
-    * your modified `config.php`
-    * `index.html`
-    * _TODO: .htaccess (?)_
-3. Edit `config.php` and set your `$REPOS_PATH` and `$PROJECTS`, and any of the available options.
-4. For each watched repository: 
-    * Create a webhook and point it towards your `hook.php` file,
+```shell
+$ ssh username@mysite.com # log in
+$ cd ~/.ssh
+$ ssh-keygen -t rsa -b 4096 -C "autodeploy"
+```
+
+When prompted either accept the default key name (id_rsa) or give your key a unique name. Press enter when asked for a passphrase, which will generate a passwordless key. Usually this isn't recommended, but we need our script to be able to connect to the remote server without a passphrase.
+
+Next, copy the contents of your public key, which can be retrieved by running:
+
+```shell
+$ cat ~/.ssh/<filename>.pub # <filename> is what you put during the generation process, or defaults to id_rsa
+```
+
+For each watched repository:
+* Create a webhook and point it towards your `hook.php` file,
   ie: `https://www.yourdomain.com/deploy/hook.php`
   Make sure that your webhook is triggered on 'push'.
-  To edit webhooks, go to the repository's Settings > Webhooks
-    * Add either a Deploy key (GitHub) or an Access key (Bitbucket) to your repo, and paste in the contents of the public key that you made in step 1
+  To edit webhooks, go to the repository's _Settings > Webhooks_.
+* Add either a Deploy key (GitHub) or an Access key (Bitbucket) to your repo, and paste in the contents of the public key that you made.
+
+Clone this repo into a folder called "deploy" (or whatever) in the public website directory of the domain to which you want to deploy.
+
+```shell
+$ cd ~/public_html
+$ git clone https://github.com/paulthewalton/autodeploy.git deploy
+```
+
+Edit `config.php` and set your `$REPOS_PATH` and `$PROJECTS`, and any of the available options.
+
 
 Now you should be good to go! Test by pushing a commit to one of the watched repositories.
 
@@ -101,10 +99,12 @@ $PROJECTS = array(
 #### Repository Full Name (string)
 
 The key for each repo in $PROJECTS **must** be the "full_name" of the repo, which can be found in the repository URL as the first 2 segments after the domains:
+
+> ht[]()tps://github.com/**username/my-cool-code**  
+> ht[]()tps://bitbucket.org/**username/my-cool-code**
+
 ```php
 $PROJECTS = array(
-    // e.g. https://github.com/username/my-cool-code
-    // e.g. https://bitbucket.org/username/my-cool-code
    'username/my-cool-code' => array(
        // set up My Cool Code repository
    ),
@@ -116,11 +116,13 @@ $PROJECTS = array(
 Within each repository, you must specify each branch you wish to track. The key for each branch **must** match the branch name.
 
 ```php
-'username/my-cool-code' => array(
-    'production' => array (
-        //... set up production branch deployment
-    ),
-),
+$PROJECTS = array(
+  'username/my-cool-code' => array(
+      'production' => array (
+          //... set up production branch deployment
+      ),
+  ),
+);
 ```
 
 #### `deploy_path` (string)
@@ -128,13 +130,14 @@ Within each repository, you must specify each branch you wish to track. The key 
 For each branch in the repository, you will need to specify the absolute path to where you want the source code to be checked out.
 
 ```php
-'username/my-cool-code' => array(
-    'production' => array (
-        'deploy_path' => '<path_to_webroot>/path/to/deploy/project'
-        //...
-    ),
-    //...
-),
+$PROJECTS = array(
+  'username/my-cool-code' => array(
+      'production' => array (
+          'deploy_path' => '<path_to_webroot>/path/to/deploy/project'
+          //...
+      ),
+  ),
+);
 ```
 
 #### `mail_to` (string)
@@ -142,13 +145,16 @@ For each branch in the repository, you will need to specify the absolute path to
 If you want, you can set an email address to recieve notifications from this script anytime this branch of the repository is deployed*.
 
 ```php
-'username/my-cool-code' => array(
-    'production' => array (
-        'deploy_path' => '<path_to_webroot>/path/to/deploy/project'
-        'mail_to'     => 'me@mysite.com'
-    ),
-    //...
-),
+$PROJECTS = array(
+  'username/my-cool-code' => array(
+      'production' => array (
+          'deploy_path' => '<path_to_webroot>/path/to/deploy/project'
+          'mail_to'     => 'me@mysite.com'
+      ),
+      //...
+  ),
+  //...
+);
 ```
 
 _* This might not work_

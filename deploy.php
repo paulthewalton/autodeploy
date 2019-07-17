@@ -205,11 +205,16 @@ function fetch_repository()
 
     // If repository or repository folder are absent then clone full repository
     if (!is_dir($repo_path) || !is_file($repo_path . 'HEAD')) {
-        _LOG("Absent repository for '$REPO', cloning");
+        _LOG("Repository missing for '$REPO', cloning");
         $clone_repo = escapeshellcmd($CONFIG['git_cmd'] . " clone --mirror git@$HOST:$git_path $git_path");
         system("cd $base_repo_path && $clone_repo", $status);
         if ($status !== 0) {
             _ERROR("Cannot clone repository git@$HOST:$git_path");
+            if ($CONFIG['verbose']) {
+                _ERROR("repo: $REPO");
+                _ERROR("repo path: $repo_path");
+                _ERROR("clone status: $status");
+            }
             exit;
         }
     }
@@ -220,6 +225,10 @@ function fetch_repository()
         system("cd $repo_path && $fetch_repo", $status);
         if ($status !== 0) {
             _ERROR("Cannot fetch repository '$REPO' in '$repo_path'!");
+            if ($CONFIG['verbose']) {
+                _ERROR("repo path: $repo_path");
+                _ERROR("fetch status: $status");
+            }
             exit;
         }
     }
@@ -248,9 +257,13 @@ function checkout_project()
         $checkout_repo = escapeshellcmd($CONFIG['git_cmd'] . " checkout -f $branch_name");
         system("cd $repo_path && GIT_WORK_TREE=$deploy_path $checkout_repo", $status);
         if ($status !== 0) {
-            _ERROR("Cannot checkout branch '$branch_name' in repo '$REPO' into '$deploy_path'");
-            _LOG_VAR("CMD: ", "cd $repo_path && GIT_WORK_TREE=$deploy_path $checkout_repo");
-            _ERROR("CHECKOUT STATUS: $status");
+            _ERROR("Cannot checkout branch '$branch_name' in repo '$REPO'");
+            if ($CONFIG['verbose']) {
+                _ERROR("repo path: $repo_path");
+                _ERROR("branch: $branch_name");
+                _ERROR("deploy path: $deploy_path");
+                _ERROR("checkout status: $status");
+            }
             exit;
         }
 

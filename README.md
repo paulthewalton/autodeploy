@@ -8,15 +8,15 @@ Based on '[Automated git deployment](http://jonathannicol.com/blog/2013/11/19/au
 
 ## Table of Contents
 
-* [Desired Workflow](#markdown-header-desired-workflow)
-* [Set up](#markdown-header-set-up)
-* [Configuration](#markdown-header-configuration)
-  * [Repositories Path](#markdown-header-repositories-path)
-  * [Projects](#markdown-header-projects)
-  * [Options](#markdown-header-options)
-* [Things to Do](#markdown-header-mail-from-optional)
-* [Things to Avoid](#markdown-header-things-to-avoid)
-* [Troubleshooting](#markdown-header-troubleshooting)
+* [Desired Workflow](#user-content-desired-workflow)
+* [Set up](#user-content-set-up)
+* [Configuration](#user-content-configuration)
+  * [Repositories Path](#user-content-repositories-path)
+  * [Projects](#user-content-projects)
+  * [Options](#user-content-options)
+* [Things to Do](#user-content-things-to-do)
+* [Things to Avoid](#user-content-things-to-avoid)
+* [Troubleshooting](#user-content-troubleshooting)
 
 ***
 

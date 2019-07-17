@@ -111,7 +111,7 @@ $PROJECTS = array(
 
 #### Repository Full Name (string)
 
-The key for each repo in $PROJECTS **must** be the "full_name" of the repo, which can be found in the repository URL as the first 2 segments after the domains:
+The key for each repo in `$PROJECTS` **must** be the "full_name" of the repo, which can be found in the repository URL as the first 2 segments after the domains:
 
 > ht[]()tps://github.com/**username/my-cool-code**  
 > ht[]()tps://bitbucket.org/**username/my-cool-code**
@@ -155,7 +155,9 @@ $PROJECTS = array(
 
 #### `mail_to` (string)
 
-If you want, you can set an email address to recieve notifications from this script anytime this branch of the repository is deployed*.
+If you want, you can set an email address to recieve notifications from this script anytime this branch of the repository is deployed*.  
+_* This might not work_
+
 
 ```php
 $PROJECTS = array(
@@ -169,8 +171,6 @@ $PROJECTS = array(
   //...
 );
 ```
-
-_* This might not work_
 
 ### Options
 
@@ -263,7 +263,7 @@ $CONFIG = array (
 
 #### `project_folder_mode` (integer)
 
-This is the folder mode for the deployed source code directories. Default is `0711`, recommend you don't go any higher than `0755`. See [http://permissions-calculator.org/](http://permissions-calculator.org/) for more info about folder permissions modes.
+This is the folder mode for the deployed source code directories. Default is `0755`, recommend you don't go any higher than that. See [http://permissions-calculator.org/](http://permissions-calculator.org/) for more info about folder permissions modes.
 
 ```php
 $CONFIG = array (
@@ -330,7 +330,7 @@ $ ssh username@website.tld
 $ cd /home/username/repos  
 ```
 
-If the script was unable to create that folder, (very possible), create it yourself
+If the script was unable to create that folder, create it yourself:
 
 ```shell
 $ mkdir /home/username/repos && cd /home/username/repos

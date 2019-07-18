@@ -1,6 +1,5 @@
 # Auto Deploy
-
-A quick and easy way to set up automatic deployments from your GitHub and Bitbucket repositories.
+Set up automatic deployments from your GitHub and Bitbucket repositories.
 
 Based on '[Automatic Bitbucket Deploy](https://bitbucket.org/lilliputten/automatic-bitbucket-deploy/)' by Igor Lilliputten (v.151005.001 (0.0.2))
 
